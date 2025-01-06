@@ -13,7 +13,9 @@ export const userSignup = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await createUser({ email, password });
-    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "24h",
+    });
     console.log(token);
     res.cookie("token", token).status(201).json({ user, token });
   } catch (error) {
@@ -42,7 +44,9 @@ export const userLogin = async (req, res) => {
       return res.status(401).json("Invalid Credentials");
     }
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "24h",
+    });
     res.cookie("token", token).status(200).json({ user, token });
   } catch (error) {
     res.status(400).json(error.message);
@@ -52,4 +56,14 @@ export const userLogin = async (req, res) => {
 
 export const getProfile = async (req, res) => {
   res.status(200).json({ user: req.user });
+};
+
+export const userLogout = async (req, res) => {
+  try {
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    redisClient.set(token, "logout", "EX", 60 * 60 * 24);
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };

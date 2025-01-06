@@ -41,11 +41,7 @@ npm install
 Create a .env file in the server directory and add the following environment variables:
 
 ```
-
-
 PORT=3000
-
-
 MONGO_URI=<your_mongo_uri>
 JWT_SECRET_KEY=<your_jwt_secret_key>
 REDIS_HOST=<your_redis_host>
@@ -96,6 +92,12 @@ The server will start on the port specified in the .env file (default is 3000).
 - **GET /api/user/profile**
 
   Retrieves the profile of the authenticated user.
+
+  Requires authentication.
+
+- **GET /api/user/logout**
+
+  Logs out the authenticated user.
 
   Requires authentication.
 
