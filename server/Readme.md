@@ -1,6 +1,6 @@
 # Collabistan
 
-This project is a Node.js server application that provides user authentication and profile management using Express, MongoDB, and Redis.
+This is the backend of collabistan.
 
 ## Project Structure
 
