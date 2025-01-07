@@ -19,6 +19,7 @@ A complete real-time chat application built using the MERN stack, enhanced with 
 ### Frontend
 
 - **React.js**
+- **Tailwind CSS**
 
 ### Backend
 
