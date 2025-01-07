@@ -1,15 +1,30 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "../config/axios";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    // Handle login logic here
-    navigate("/profile");
+    const res = axios
+      .post(
+        "/api/user/signup",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then((res) => {
+        toast.success("Signed up successfully!");
+        console.log(res.data);
+        navigate("/");
+      })
+      .catch((error) => {
+        toast.error("Something went wrong");
+        console.log(error);
+      });
   };
 
   return (
@@ -21,7 +36,7 @@ const Register = () => {
         <h2 className="text-2xl font-bold text-white mb-6 text-center">
           Register
         </h2>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
           <div className="mb-4">
             <label className="block text-gray-400 mb-2" htmlFor="email">
               Email

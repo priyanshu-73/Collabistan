@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "../config/axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,8 +10,21 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Handle login logic here
-    navigate("/profile");
+    const res = axios
+      .post(
+        "/api/user/signin",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then((res) => {
+        toast.success("Logged in successfully!");
+        console.log(res.data);
+        navigate("/");
+      })
+      .catch((error) => {
+        toast.error("Invalid Credentials");
+        console.log(error.response.data);
+      });
   };
 
   return (

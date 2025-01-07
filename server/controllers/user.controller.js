@@ -16,7 +16,7 @@ export const userSignup = async (req, res) => {
     const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY, {
       expiresIn: "24h",
     });
-    console.log(token);
+    delete user._doc.password;
     res.cookie("token", token).status(201).json({ user, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -47,6 +47,7 @@ export const userLogin = async (req, res) => {
     const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY, {
       expiresIn: "24h",
     });
+    delete user._doc.password;
     res.cookie("token", token).status(200).json({ user, token });
   } catch (error) {
     res.status(400).json(error.message);
