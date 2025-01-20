@@ -1,6 +1,7 @@
 import Project from "../models/project.model.js";
 import User from "../models/user.model.js";
 import {
+  addUsers,
   createProject,
   getAllProjectByUserId,
 } from "../services/project.service.js";
@@ -42,6 +43,28 @@ export const getProjects = async (req, res) => {
     const projects = await getAllProjectByUserId({ userId: loggedInUser._id });
 
     res.status(200).json({ projects: projects });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const addUserToProject = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const loggedInUser = await User.findOne({ email: req.user.email });
+    const { projectId, users } = req.body;
+
+    const project = await addUsers({
+      projectId,
+      users,
+      userId: loggedInUser._id,
+    });
+
+    res.status(200).json({ project: project });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
