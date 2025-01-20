@@ -5,6 +5,7 @@ import db from "./db/db.js";
 import userRouter from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import projectRouter from "./routes/project.route.js";
 
 dotenv.config();
 
@@ -20,5 +21,6 @@ app.use(cors());
 
 // Routes
 app.use("/api/user", userRouter);
+app.use("/api/project", projectRouter);
 
 export default app;

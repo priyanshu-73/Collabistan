@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../config/axios";
 import toast from "react-hot-toast";
+import { UserContext } from "../context/user.context";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const { setUser } = useContext(UserContext);
+
   const handleRegister = (e) => {
     e.preventDefault();
-    const res = axios
+    axios
       .post(
         "/api/user/signup",
         { email, password },
@@ -18,12 +21,12 @@ const Register = () => {
       )
       .then((res) => {
         toast.success("Signed up successfully!");
-        console.log(res.data);
+        setUser(res.data);
         navigate("/");
       })
       .catch((error) => {
         toast.error("Something went wrong");
-        console.log(error);
+        console.log(error.response.data);
       });
   };
 

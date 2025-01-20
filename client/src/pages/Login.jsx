@@ -1,28 +1,36 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../config/axios";
 import toast from "react-hot-toast";
+import { UserContext } from "../context/user.context";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const { setUser } = useContext(UserContext);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const res = axios
+
+    axios
       .post(
         "/api/user/signin",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       )
       .then((res) => {
+        localStorage.setItem("token", res.data?.token);
+        console.log("data: ", res.data);
+        setUser(res.data);
         toast.success("Logged in successfully!");
-        console.log(res.data);
         navigate("/");
       })
       .catch((error) => {
-        toast.error("Invalid Credentials");
+        const errorMessage =
+          error.response?.data?.message || "An error occurred!";
+        toast.error(errorMessage);
         console.log(error.response.data);
       });
   };
