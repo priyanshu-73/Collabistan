@@ -2,6 +2,7 @@ import express from "express";
 import { body } from "express-validator";
 import {
   addUserToProject,
+  getOne,
   getProjects,
   newProject,
 } from "../controllers/project.controller.js";
@@ -17,6 +18,8 @@ router.post(
 );
 
 router.get("/all", isAuth, getProjects);
+
+router.get("/get-project/:projectId", isAuth, getOne);
 
 router.put(
   "/addusers",

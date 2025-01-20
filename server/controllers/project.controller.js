@@ -4,6 +4,7 @@ import {
   addUsers,
   createProject,
   getAllProjectByUserId,
+  getOneProject,
 } from "../services/project.service.js";
 import { validationResult } from "express-validator";
 
@@ -43,6 +44,17 @@ export const getProjects = async (req, res) => {
     const projects = await getAllProjectByUserId({ userId: loggedInUser._id });
 
     res.status(200).json({ projects: projects });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const getOne = async (req, res) => {
+  const { projectId } = req.params;
+  try {
+    const project = await getOneProject({ projectId });
+    res.status(200).json({ project });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
