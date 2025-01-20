@@ -11,3 +11,13 @@ export const createProject = ({ name, userId }) => {
   const project = Project.create({ name, users: [userId] });
   return project;
 };
+
+export const getAllProjectByUserId = async ({ userId }) => {
+  if (!userId) {
+    throw new Error("Please login to see your projects");
+  }
+
+  const allProjects = await Project.find({ users: userId });
+
+  return allProjects;
+};
