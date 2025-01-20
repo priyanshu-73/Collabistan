@@ -15,3 +15,8 @@ export const createUser = async ({ email, password }) => {
     throw new Error(error.message);
   }
 };
+
+export const getAllUser = async ({ userId }) => {
+  const users = await User.find({ _id: { $ne: userId } });
+  return users;
+};
