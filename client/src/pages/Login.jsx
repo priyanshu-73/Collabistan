@@ -22,7 +22,6 @@ const Login = () => {
       )
       .then((res) => {
         localStorage.setItem("token", res.data?.token);
-        console.log("data: ", res.data);
         setUser(res.data);
         toast.success("Logged in successfully!");
         navigate("/");

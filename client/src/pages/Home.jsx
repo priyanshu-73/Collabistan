@@ -1,13 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/user.context";
 import toast from "react-hot-toast";
 import axios from "../config/axios";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { user } = useContext(UserContext);
-
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState(null);
+  const [projects, setProjects] = useState([]);
 
   const createProject = async (e) => {
     e.preventDefault();
@@ -28,9 +30,20 @@ const Home = () => {
       });
   };
 
+  useEffect(() => {
+    axios
+      .get("/api/project/all", {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((res) => {
+        setProjects(res.data.projects);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <main className="p-4">
-      <div className="projects">
+      <div className="projects flex flex-wrap gap-3 items-center">
         <button
           onClick={() => setIsModalOpen(true)}
           className="project text-xl flex gap-2 justify-center border border-black bg-black p-3 rounded-lg hover:bg-slate-800"
@@ -38,6 +51,21 @@ const Home = () => {
           <h4 className="font-semibold text-white">New Project</h4>
           <i className="ri-add-line font-semibold text-white"></i>
         </button>
+        {projects.map((project) => (
+          <div
+            key={project._id}
+            className="border-2 p-3 cursor-pointer hover:bg-slate-200"
+            onClick={() => {
+              navigate("/project", { state: { project } });
+            }}
+          >
+            <h2 className="font-semibold">{project.name}</h2>
+            <div className="flex gap-1">
+              <i className="ri-team-fill"></i>
+              <span>{project.users.length}</span>
+            </div>
+          </div>
+        ))}
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
